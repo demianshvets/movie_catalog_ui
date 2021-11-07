@@ -26,7 +26,7 @@ class Movie extends React.Component {
         <div className="card shadow-sm">
         
  
- <img src={variables.PHOTO_URL+ this.state.data.photoPath}  height="400" width="100%"/>
+ <img src={variables.PHOTO_URL+ this.state.data.photoPath}  height="400" width="100%" />
           
         
 
@@ -35,13 +35,15 @@ class Movie extends React.Component {
             <p><b>{this.state.data.name}</b></p>
 <p>Genres: {this.state.data.genres}</p>
 <p>Company: {this.state.data.company}</p>
-<p>Description: {this.state.data.description}</p>
+<p>Description: 
+<textarea className="scroll" rows="15" cols="50" id="aboutDescription" readOnly
+    >{this.state.data.description}</textarea>
+</p>
 <p>Duration: {this.state.data.duration}</p> 
             </p>
             <div className="d-flex justify-content-between align-items-center">
               <div className="btn-group">
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={this.onClick}>delete</button>
-                <button type="button" className="btn btn-sm btn-outline-secondary">Edit</button>
               </div>
               <small className="text-muted">Release {this.state.data.releaseDate}</small>
             </div>
@@ -175,26 +177,36 @@ class MovieForm extends React.Component {
     }
     render() {
         return (
-
-            <form onSubmit={this.onSubmit}>
-                <p>
+           
+<div>
+                 <div className="row gy-3">
+                <div className="col-md-3">
                     <input type="text"
                         placeholder="New Genre"
                         value={this.state.newGenre}
                         onChange={this.onNewGenreChange} />
-                </p>
+                        <p/>             
                 <button onClick={this.onSubmitAddGenre}>
                     Add new genre
                 </button>
-                <p>
+                <hr/>  
+                </div >
+                <div className="col-md-3">
                     <input type="text"
                         placeholder="New Company"
                         value={this.state.newCompany}
                         onChange={this.onNewComapnyChange} />
-                </p>
+                        <p/>  
                 <button onClick={this.onSubmitAddCompany}>
                     Add new company
                 </button>
+                <hr/>  
+                </div>
+                </div>
+                
+            <form onSubmit={this.onSubmit}>
+            <div className="row gy-3">
+            <div className="col-md-3">
                 <p>
                     <input type="text"
                         placeholder="Movie name"
@@ -204,6 +216,8 @@ class MovieForm extends React.Component {
                 <div className="App">
                     <input type="file" onChange={this.onPhotoChange} />
                 </div>
+                </div>
+                <div className="col-md-3">
                 <p className="select" >
                     <select id="standard-select" onChange={this.onGenresChange}  >
                         {this.props.GenresList.map((genre) =>
@@ -227,7 +241,8 @@ class MovieForm extends React.Component {
                     </select>
                     <span className="focus"></span>
                 </p>
-
+                </div>
+                <div className="col-md-3">
                 <p>
                     <input type="text"
                         placeholder="Description"
@@ -240,6 +255,8 @@ class MovieForm extends React.Component {
                         value={this.state.releaseDate}
                         onChange={this.onReleaseDateChange} />
                 </p>
+                </div>
+                <div className="col-md-3">
                 <p>
                     <input type="text"
                         placeholder="00:00:00"
@@ -247,7 +264,10 @@ class MovieForm extends React.Component {
                         onChange={this.onDurationChange} />
                 </p>             
                 <input type="submit" value="Add Movie" />
+                </div>
+                </div>
             </form>
+           </div>
         );
     }
 }
@@ -465,8 +485,10 @@ class MoviesList extends React.Component {
            
             <MovieForm GenresList={this.state.genres}  CompaniesList={this.state.companies} onMovieSubmit={this.onAddMovie} onGenreSubmit={this.onAddGenre} onCompanySubmit={this.onAddCompany} />
             <h2>Movies Catalog</h2>
-           
+           <div className="row gy-3">
+               <div className="col-md-2">
             <label >Filter by Genre:</label>
+           
             <div className="select">
                 <select id="standard-select" onChange={this.onGenreFilter}>
                     <option value="all" onSelect={this.onGenreFilter}>
@@ -481,6 +503,8 @@ class MoviesList extends React.Component {
                 </select>
                 <span className="focus"></span>
             </div>
+            </div>
+            <div className="col-md-2">
             <label >Filter by Company:</label>
             <div className="select">
                 <select  onChange={this.onCompanyFilter}>
@@ -496,13 +520,21 @@ class MoviesList extends React.Component {
                 </select>
                 <span className="focus"></span>
             </div>
-            Sorteren by:
+            </div>
+            <div className="col-md-1">
+            <label > Sorteren by:</label>
+            </div>
+            <div className="col-md-1">
             <button onClick={this.sortByDuration}>
                 Duration
             </button>
+            </div>
+            <div className="col-md-1">
             <button onClick={this.sortByRelease}>
                 Release
             </button>
+            </div>
+            </div>
             <div className="album py-5 bg-light">
     <div className="container">
 
