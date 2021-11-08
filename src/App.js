@@ -8,11 +8,28 @@ import { useEffect, useState } from 'react';
 import { variables } from "./Variables.js";
 
 function App() {
-  const [userEmail, setUserEmail]=useState('' );
+  const [userEmail, setUserEmail]=useState('');
+  let menu;
+
+  const logout = async () =>
+  {
+    
+   await fetch(variables.USER_URL+"/logout",
+    {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      credentials:'include',
+      
+    });
+    setUserEmail('');
+    
+  }
+
 
   useEffect(()=>
   {
     (
+      
       async()=>
       {
         try{
@@ -22,7 +39,14 @@ function App() {
           credentials:'include'
         });
         const content= await response.json();
-        setUserEmail(content.email);  
+       
+        if(content.email===undefined||content.email==='')
+        {
+
+        }else{
+          setUserEmail(content.email);
+        }
+          
       }
       catch (error) {
         
@@ -32,6 +56,42 @@ function App() {
 
     )();
   });
+
+if(userEmail==='')
+{
+  menu =(
+    <ul className="navbar-nav me-auto mb-2 mb-md-0">
+    <li className="nav-item">
+   
+    </li>
+    <li className="nav-item">
+     <NavLink className="nav-link" to="/login">
+
+       Login
+     </NavLink>
+    </li>
+    <li className="nav-item">
+      <NavLink className="nav-link" to="/register">Register</NavLink>
+    </li>
+  </ul>
+  )
+
+} else {
+menu = (
+  <ul className="navbar-nav me-auto mb-2 mb-md-0">
+  <li className="nav-item">
+ 
+  </li>
+  <li className="nav-item">
+   <NavLink className="nav-link" to="/login" onClick={logout}>
+
+     Logout
+   </NavLink>
+  </li>
+</ul>
+)
+}
+
   return (
     <BrowserRouter>
     <div className="App container">
@@ -40,20 +100,7 @@ function App() {
   <NavLink  className="navbar-brand"  to="/">Home</NavLink>
   
     <div>
-      <ul className="navbar-nav me-auto mb-2 mb-md-0">
-        <li className="nav-item">
-       
-        </li>
-        <li className="nav-item">
-         <NavLink className="nav-link" to="/login">
-
-           Login
-         </NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/register">Register</NavLink>
-        </li>
-      </ul>
+    {menu}
      
     </div>
   </div>
@@ -61,8 +108,8 @@ function App() {
       
       
         <Routes>
-        <Route path="/" exact element={<Home/>}/>
-        <Route path="/login" element={<Login/>} />
+        <Route path="/" exact element={<Home email={userEmail}/>}/>
+        <Route path="/login" element={<Login setGlobalEmail={setUserEmail}/>} />
         <Route path="/register" element={<Register/>} />
         </Routes>
        

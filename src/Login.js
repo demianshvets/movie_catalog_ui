@@ -1,10 +1,14 @@
 import React,{useState} from "react";
 import './Login.css';
 import { variables } from "./Variables.js";
+import {Navigate} from "react-router-dom";
 
-const Login=()=>{
+const Login=(props)=>{
+
+
   const [Email,setEmail]=useState('');
   const [Password,setPassword]=useState('');
+  const [redirect,setRedirect]=useState(false);
   const submit = async (e) =>
   {
       e.preventDefault();
@@ -21,11 +25,17 @@ const Login=()=>{
       });
 
       const content=await response.json();
-      console.log({
-        content
-      })
+      if(content.email===undefined||content.email==='')
+      {
+
+      }else{
+        props.setGlobalEmail(content.email);
+        setRedirect(true);
+      }
     }
-  
+    if(redirect)
+    return <Navigate to="/"></Navigate>;
+
         return(
           <main className="form-signin">
             <div>

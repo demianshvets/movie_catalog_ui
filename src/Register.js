@@ -35,7 +35,7 @@ setRedirect(true);
     return( <main className="form-signin">
     <div>
         <form onSubmit={submit}>
-            <h1 className="h3 mb-3 fw-normal">Please register</h1>
+            <h1 className="h3 mb-3 fw-normal">Register</h1>
             
   <div className="form-floating">
     <input type="email" className="form-control" placeholder="name@example.com" required
