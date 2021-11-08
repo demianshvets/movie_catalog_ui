@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import './Login.css';
 import { variables } from "./Variables.js";
 import {Navigate} from "react-router-dom";
@@ -9,10 +9,18 @@ const Login=(props)=>{
   const [Email,setEmail]=useState('');
   const [Password,setPassword]=useState('');
   const [redirect,setRedirect]=useState(false);
+  useEffect(()=>
+  {
+    if(props.userEmail==='')
+    setRedirect(false);
+    else
+    setRedirect(true);
+    });
+
   const submit = async (e) =>
   {
       e.preventDefault();
-
+try{
       const response = await fetch(variables.USER_URL+"/login",
       {
         method:'POST',
@@ -32,6 +40,12 @@ const Login=(props)=>{
         props.setGlobalEmail(content.email);
         setRedirect(true);
       }
+    }catch (error) {
+      var message="seems like no server connection";
+        console.error(message,error);
+        }
+        
+
     }
     if(redirect)
     return <Navigate to="/"></Navigate>;

@@ -49,8 +49,8 @@ function App() {
           
       }
       catch (error) {
-        
-      console.error(error);
+       var message="seems like no server connection";
+      console.error(message,error);
       }
       }
 
@@ -109,8 +109,8 @@ menu = (
       
         <Routes>
         <Route path="/" exact element={<Home email={userEmail}/>}/>
-        <Route path="/login" element={<Login setGlobalEmail={setUserEmail}/>} />
-        <Route path="/register" element={<Register/>} />
+        <Route path="/login" element={<Login setGlobalEmail={setUserEmail} userEmail={userEmail}/>} />
+        <Route path="/register" element={<Register userEmail={userEmail}/>} />
         </Routes>
        
     </div>

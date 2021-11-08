@@ -1,16 +1,26 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import './Login.css';
 import {Navigate} from "react-router-dom";
 import { variables } from "./Variables.js";
 
-const Register=()=>{
+const Register=(props)=>{
     const [Email,setEmail]=useState('');
     const [Password,setPassword]=useState('');
     const [redirect,setRedirect]=useState(false);
 
+    useEffect(()=>
+    {
+      if(props.userEmail==='')
+      setRedirect(false);
+      else
+      setRedirect(true);
+      });
+  
+
     const submit = async (e) =>
     {
         e.preventDefault();
+        try{
 
         const response = await fetch(variables.USER_URL+"/register",
         {
@@ -28,6 +38,11 @@ const Register=()=>{
         })
 
 setRedirect(true);
+      }
+      catch (error) {
+        var message="seems like no server connection";
+        console.error(message, error);
+        }       
     }
     if(redirect)
     return <Navigate to="/login"></Navigate>;

@@ -1,4 +1,4 @@
-import React,{Component} from "react";
+import React from "react";
 import { variables } from "./Variables.js";
 import {Navigate} from "react-router-dom";
 
@@ -25,21 +25,21 @@ class Movie extends React.Component {
         <div className="card shadow-sm">
         
  
- <img src={variables.PHOTO_URL+ this.state.data.photoPath}  height="400" width="100%" />
+ <img src={variables.PHOTO_URL+ this.state.data.photoPath} alt={variables.PHOTO_URL+"Photos/defalt.jpg"} height="400" width="100%" />
           
         
 
           <div className="card-body">
-          <p className="card-text">
+          <div className="card-text">
             <p><b>{this.state.data.name}</b></p>
 <p>Genres: {this.state.data.genres}</p>
 <p>Company: {this.state.data.company}</p>
 <p>Description: 
-<textarea className="scroll" rows="15" cols="50" id="aboutDescription" readOnly
-    >{this.state.data.description}</textarea>
+<textarea className="scroll" rows="15" cols="50" value={this.state.data.description} id="aboutDescription" readOnly
+    ></textarea>
 </p>
 <p>Duration: {this.state.data.duration}</p> 
-            </p>
+            </div>
             <div className="d-flex justify-content-between align-items-center">
               <div className="btn-group">
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={this.onClick}>delete</button>
@@ -97,13 +97,13 @@ class MovieForm extends React.Component {
 
     onNameChange(e) {
         this.redirectIfunloggined();
-        if (this.state.genres != this.state.genresTemp) {
+        if (this.state.genres !== this.state.genresTemp) {
             var g = this.props.GenresList.map((genre) => genre.genreId);
 
             var g1 = g[0];
             this.setState({ genres: g1 });
         }
-        if (this.state.company != this.state.companyTemp) {
+        if (this.state.company !== this.state.companyTemp) {
             var c = this.props.CompaniesList.map((company) => company.companyId);
             var c1 = c[0];
             this.setState({ company: c1 });
@@ -129,11 +129,31 @@ class MovieForm extends React.Component {
     }
     onReleaseDateChange(e) {
         this.redirectIfunloggined();
-        this.setState({ releaseDate: e.target.value });
+        if(e.target.value.length<=10)
+        {
+            
+        if((e.target.value.length===2||e.target.value.length===5)&&e.target.value.length>this.state.releaseDate.length)
+        {                    
+        this.setState({ releaseDate: e.target.value+'.' });
+        }
+        else{
+            this.setState({ releaseDate: e.target.value});
+        }
+        }
     }
     onDurationChange(e) {
         this.redirectIfunloggined();
-        this.setState({ duration: e.target.value });
+        if(e.target.value.length<=8)
+        {
+            
+        if((e.target.value.length===2||e.target.value.length===5)&&e.target.value.length>this.state.duration.length)
+        {              
+        this.setState({ duration: e.target.value+':' });
+        }
+        else{
+            this.setState({ duration: e.target.value});
+        }
+        }
     }
     onNewGenreChange(e) {
         this.redirectIfunloggined();
@@ -162,8 +182,7 @@ class MovieForm extends React.Component {
         
     }
    imageUpload = (movie) => {
-       
-
+    this.redirectIfunloggined();
         const formData = new FormData();
         formData.append("file", this.state.photoFile, this.state.photoName);
 
@@ -182,7 +201,7 @@ class MovieForm extends React.Component {
  
     onSubmit(e) {
         e.preventDefault();
-        
+        this.redirectIfunloggined();
         var movieName = this.state.name.trim();
         var movieGenres = this.state.genres;
         var movieCompany = this.state.company;
@@ -212,7 +231,7 @@ class MovieForm extends React.Component {
                         placeholder="New Genre"
                         value={this.state.newGenre}
                         onChange={this.onNewGenreChange} />
-                        <p/>             
+                            
                 <button onClick={this.onSubmitAddGenre}>
                     Add new genre
                 </button>
@@ -223,7 +242,7 @@ class MovieForm extends React.Component {
                         placeholder="New Company"
                         value={this.state.newCompany}
                         onChange={this.onNewComapnyChange} />
-                        <p/>  
+                   
                 <button onClick={this.onSubmitAddCompany}>
                     Add new company
                 </button>
@@ -283,9 +302,10 @@ class MovieForm extends React.Component {
                         onChange={this.onReleaseDateChange} />
                 </p>
                 </div>
+              
                 <div className="col-md-3">
                 <p>
-                    <input type="text"
+                    <input type="text" 
                         placeholder="00:00:00"
                         value={this.state.duration}
                         onChange={this.onDurationChange} />
